@@ -32,6 +32,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk (~> 1.15.0)
+  json
   mini_magick
   redis (~> 3.0.4)
   sinatra

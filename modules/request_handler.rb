@@ -1,6 +1,6 @@
 require './modules/cache'
 require './modules/image_processor'
-require 'digest'
+require './modules/key_generator'
 
 module Whim
 
@@ -9,8 +9,7 @@ module Whim
     class << self
       def url_for original_url, geometry, format
 
-        # "Tempt the demo gods" with a non-unique key...
-        key = "#{Digest::MD5.hexdigest(original_url+geometry)}/#{File.basename(original_url,'.*')}.#{format}"
+        key = Key.generate( original_url, geometry, format )
 
         begin
           url = Cache.fetch key
@@ -18,11 +17,14 @@ module Whim
 
         rescue Cache::Miss
 
+          result = RemoteFile.new(key)
+
           image = Image.new(original_url)
           image.process! ( geometry )
 
-          result = RemoteFile.new(key, image.blob)
-          result.store!
+          result.store do |object|
+            object.write( image.blob, :acl=>:public_read )
+          end
 
           url = Cache.store key, result.url
 

@@ -27,17 +27,17 @@ module Whim
 
     end
 
-    def initialize key, value=nil
+    def initialize key
       @key = key
-      @value = value
     end
 
     def url
       @url ||= @@bucket.objects[@key].public_url
     end
 
-    def store!
-      @@bucket.objects[@key].write(@value, :acl=>:public_read)
+    def store &block
+      object = @@bucket.objects[@key]
+      block.call(object)
       @url = @@bucket.objects[@key].public_url
     end
 
