@@ -20,7 +20,7 @@ module Whim
           result = RemoteFile.new(key)
 
           image = Image.new(original_url)
-          image.process! ( geometry )
+          image.process! ( geometry, format )
 
           result.store do |object|
             object.write( image.blob, :acl=>:public_read )

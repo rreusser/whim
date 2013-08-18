@@ -8,9 +8,9 @@ module Whim
       @image = MiniMagick::Image.open( uri )
     end
 
-    def process!( geometry = "100x100" )
+    def process!( geometry = "100x100", format='jpg' )
       @image.resize( geometry )
-      @image.format 'jpg'
+      @image.format format
     end
 
     def blob
