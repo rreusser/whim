@@ -8,7 +8,7 @@ module Whim
       @image = MiniMagick::Image.open( uri )
     end
 
-    def process!( geometry = "100x100", format='jpg' )
+    def process( geometry = "100x100", format='jpg' )
       @image.resize( geometry )
       @image.format format
     end
