@@ -1,7 +1,7 @@
 require 'mini_magick'
 require 'open-uri'
 
-module EasyCache
+module Whim
   class Image
 
     def initialize( uri )

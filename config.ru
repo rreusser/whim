@@ -1,3 +1,3 @@
 require './modules/app'
 
-run EasyCache::App.new
+run Whim::App.new

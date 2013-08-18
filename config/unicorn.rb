@@ -1,16 +1,12 @@
-require './modules/cache'
-require './modules/file_storage'
+require './modules/app'
 
-# set path to app that will be used to configure unicorn, 
-# note the trailing slash in this example
 @dir = "./"
 
-worker_processes 2
+worker_processes 4
 working_directory @dir
 
 timeout 30
 
 after_fork do |server, worker|
-  EasyCache::Cache.connect!
-  EasyCache::RemoteFile.connect!
+  Whim::App.connect!
 end

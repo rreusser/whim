@@ -2,14 +2,15 @@ require './modules/cache'
 require './modules/image_processor'
 require 'digest'
 
-module EasyCache
+module Whim
 
   class RequestHandler
 
     class << self
-      def url_for original_url, geometry
+      def url_for original_url, geometry, format
 
-        key = "#{Digest::MD5.hexdigest(original_url+geometry)}/#{File.basename(original_url)}"
+        # "Tempt the demo gods" with a non-unique key...
+        key = "#{Digest::MD5.hexdigest(original_url+geometry)}/#{File.basename(original_url,'.*')}.#{format}"
 
         begin
           url = Cache.fetch key
@@ -29,12 +30,7 @@ module EasyCache
 
         end
 
-
-        if ENV['DEBUG']=='true'
-          "<img src=\"#{url.to_s}\" alt=\"#{File.basename(original_url)}\">"
-        else
-          redirect url.to_s
-        end
+        url.to_s
 
       end
 

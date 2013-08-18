@@ -1,6 +1,6 @@
 require 'aws-sdk'
 
-module EasyCache
+module Whim
   class RemoteFile
 
     class << self
@@ -14,6 +14,17 @@ module EasyCache
         @@bucket = @@s3.buckets[ ENV['S3_BUCKET'] ]
 
       end
+
+      def clean_up days_ago=30
+
+        cuttoff_date = Date.today - days_ago
+
+        Cache.keys_older_than(cuttoff_date) do |key|
+          RemoteFile.new(key).remove!
+        end
+
+      end
+
     end
 
     def initialize key, value=nil
@@ -29,6 +40,11 @@ module EasyCache
       @@bucket.objects[@key].write(@value, :acl=>:public_read)
       @url = @@bucket.objects[@key].public_url
     end
+
+    def remove!
+      @@bucket.objects[@key].delete
+    end
+
 
   end
 end
